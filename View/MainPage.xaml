@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ToDoList.View.MainPage"
+             xmlns:vm="clr-namespace:ToDoList.ViewModel"
+             x:DataType="vm:MainPageViewModel"
+             xmlns:model="clr-namespace:ToDoList.Model"
+             Title="MainPage">
+    <Grid  RowDefinitions="100, Auto, *"
+               ColumnDefinitions=".75*, .25*"
+               Padding="50"
+               RowSpacing="10"
+               ColumnSpacing="2">
+            <Frame Grid.Row="0"
+                   BackgroundColor="Aquamarine"
+                   BorderColor="Black"
+                   Margin="10"
+                   Padding="5">
+                <Entry 
+                      Grid.Row="0"
+                      Grid.ColumnSpan="10"
+                      HorizontalOptions="Fill"
+                      Placeholder="notes"
+                      VerticalOptions="CenterAndExpand"
+                      Text="{Binding Text}"/>
+            </Frame>
+
+            <Button Grid.Row="0"
+                    Grid.Column="1"
+                    Padding="15,10,30,10"
+                    Margin="10"
+                    HorizontalOptions="End"
+                    Text="Save"
+                    Command="{Binding AddCommand}"/>
+
+            <CollectionView Grid.Row="2"
+                            Margin="12,10"
+                            SelectionMode="None" 
+                            ItemsSource="{Binding Iteams}"
+                            >
+                <CollectionView.ItemTemplate>
+
+                    <DataTemplate x:DataType="{x:Type x:String}">
+                        <SwipeView>
+                            <SwipeView.LeftItems>
+                                <SwipeItems>
+                                <SwipeItem BackgroundColor="Red"
+                                           Text="Delete"   
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}},Path=DeleteCommand}"
+                                           CommandParameter="{Binding .}"/>
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
+                        <Frame>
+                            <StackLayout>
+                                <Grid Padding="10,15"
+                                      ColumnDefinitions=".25*,.75*">
+                                    <CheckBox
+                                              Grid.Column="0"
+                                              x:Name="checkBox">
+
+                                    </CheckBox>
+                                    <Label Text="{Binding .}"
+                                           Grid.Column="1"
+                                           FontSize="24">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label"
+                                                         Binding="{Binding Source={x:Reference checkBox}, Path=IsChecked}"
+                                                         Value="true">
+                                                <Setter Property="TextDecorations"
+                                                        Value="Strikethrough">
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
+                    </SwipeView>
+                    </DataTemplate>
+
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </Grid>
+
+   
+
+</ContentPage>
